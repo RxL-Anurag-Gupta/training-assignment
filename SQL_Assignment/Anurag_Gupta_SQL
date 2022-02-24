@@ -1,0 +1,56 @@
+create table locations (location_id int, location_name char, primary key(location_id));
+
+create table department(dept_id int, department_name char, primary key(dept_id));
+
+create table employee
+(emp_id int, 
+employee_name char(255), 
+department_id int, 
+location_id int, 
+salary int,
+primary key (emp_id),
+foreign key (location_id) references locations(location_id),
+foreign key (department_id) references department(dept_id)
+);
+
+insert into locations values (115,'Jaipur');
+insert into locations values (210,'noida');
+
+insert into department values (101,'CSE');
+insert into department values (102,'CCE');
+insert into department values (103,'ECE');
+insert into department values (104,'ME');
+
+insert into employee values (1,'emp1',101,210,20000);
+insert into employee values (2,'emp1',101,115,25000);
+insert into employee values (3,'emp3',102,210,20000);
+insert into employee values (4,'emp4',104,115,30000);
+insert into employee values (5,'emp5',103,210,40000);
+insert into employee values (6,'emp6',102,210,30000);
+insert into employee values (7,'emp7',103,210,25000);
+insert into employee values (8,'emp8',104,115,70000);
+insert into employee values (9,'emp9',104,115,80000);
+insert into employee values (10,'emp10',101,210,40000);
+insert into employee values (11,'emp11',102,210,25000);
+insert into employee values (12,'emp12',102,115,20000);
+insert into employee values (13,'emp13',103,115,70000);
+insert into employee values (14,'emp14',101,210,80000);
+insert into employee values (15,'emp15',103,210,40000);
+insert into employee values (16,'emp16',101,115,30000);
+insert into employee values (17,'emp17',104,115,40000);
+insert into employee values (18,'emp18',102,210,45000);
+insert into employee values (19,'emp19',101,210,35000);
+insert into employee values (20,'emp20',103,115,20000);
+
+
+a)
+select employee_name,department_name from employee right join department on employee.department_id=department.dept_id;
+b)
+select e.employee_name,d.department_name,l.location_name from employee e join department d on e.department_id=d.dept_id join locations l on e.location_id=l.location_id;
+
+
+c)
+select max(salary),department_name from employee e join department d on e.department_id=d.dept_id group by department_name;
+
+d)
+select s, department_name from (select max(salary) s,department_id from (employee join (select max(salary) s,department_id m from employee e group by department_id) t on employee.department_id = t.m) where salary < s group by department_id ) join department on department.dept_id = department_id;
